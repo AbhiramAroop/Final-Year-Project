@@ -18,7 +18,7 @@ for i in range(len(my_data)):
     input_data.append([time_int, my_data[i][1], my_data[i][2]])
 
 input_data = np.array(input_data)
-# print("SINGLE INPUT FILE", input_data)
+print("SINGLE INPUT FILE", input_data)
 # output data
 my_data = np.genfromtxt("physionet.org/files/challenge-2012/1.0.0/Outcomes-a.txt", delimiter=',',
                         dtype='U64')
@@ -54,4 +54,22 @@ for i in range(len(input_parameter)):
 input_matrix = np.array(input_matrix,
                         dtype=object)
 # Input with array values in chronological order
-print(input_matrix)
+print(input_matrix,len(input_matrix))
+
+# Lets have all parameters for each patient
+
+parameters = "Age Gender Height ICUType Weight Albumin ALP ALT AST Bilirubin BUN Cholesterol Creatinine DiasABP FiO2 GCS Glucose HCO3 HCT HR K Lactate Mg MAP MechVent Na NIDiasABP NIMAP NISysABP PaCO2 PaO2 pH Platelets RespRate SaO2 SysABP Temp TropI TropT Urine WBC"
+parameters = parameters.split(" ")
+print(parameters)
+values = []
+for i in range(len(parameters)):
+    values.append([])
+
+for i in input_matrix[2:]:
+    #print(i[0])
+    index = parameters.index(i[0])
+    values[index] = i[1]
+
+#values of corresponding index parameters
+#in a fixed order, as input for ML
+print(values)
