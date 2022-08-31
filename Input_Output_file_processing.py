@@ -1,6 +1,5 @@
 import os
 import numpy as np
-import timeit
 
 #read data from input file
 def read_input_file(input_file):
@@ -21,13 +20,14 @@ def read_input_file(input_file):
     return input_data
 
 #Read data from an output file
-def read_output_file(output_file):
-    my_data = np.genfromtxt(output_file, delimiter=',',
+def read_output_file():
+    my_data = np.genfromtxt("physionet.org/files/challenge-2012/1.0.0/Outcomes-a.txt", delimiter=',',
                             dtype='U64')
     # print(my_data)
+    my_data = my_data[1:]
     output_data = []
     for i in my_data:
-        output_data.append([i[0], i[5]])
+        output_data.append([int(i[0]), int(i[5])])
     output_data = np.array(output_data)
     return output_data
 
@@ -108,14 +108,17 @@ def input_files_to_list():
 
     return input_files
 
+
 #converts all of the inputs into a matrix format (format 3)
 #only SET A for now
 def input_files_to_input_matrix(format):
     input_files = input_files_to_list()[:-1]
     input_values_matrix = []
+    record_ids = []
 
     for i in input_files:
         input_data = read_input_file(i)
+        record_ids.append(input_data[1][2])
         input_parameter, input_value = input_format_1(input_data)
         parameters, values = input_format_2(input_parameter, input_value)
         if format == 1:
@@ -125,11 +128,11 @@ def input_files_to_input_matrix(format):
         else:
             input_format = input_format_3(values)
         input_values_matrix.append(input_format)
-        #print(input_format)
 
-    return input_values_matrix
+    return record_ids,input_values_matrix
 
 
-start = timeit.timeit()
+start = timeit.default_timer()
 data = input_files_to_input_matrix(3)
-print("done",timeit.timeit()-start)
+print(data)
+print("done",timeit.default_timer()-start)
