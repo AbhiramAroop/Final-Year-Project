@@ -132,7 +132,5 @@ def input_files_to_input_matrix(format):
     return record_ids,input_values_matrix
 
 
-start = timeit.default_timer()
-data = input_files_to_input_matrix(3)
-print(data)
-print("done",timeit.default_timer()-start)
+#data = input_files_to_input_matrix(3)
+#print(data)
