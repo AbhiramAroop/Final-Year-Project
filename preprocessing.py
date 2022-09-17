@@ -46,20 +46,22 @@ def set_mean():
         values = data[i][1]
         for j in range(len(values)):
             mean = compute_mean(values[j])
-            if mean != None:
+            if (mean != None) and (mean != -1.0):
                 data_mean_input[i].append(mean)
             else:
-                data_mean_input[j].append(mean_vals[j])
+                data_mean_input[i].append(mean_vals[j])
 
 def get_output_list():
     data = input_output_data.read_output_file()
     output = []
-    for i in data:
-        output.append(data[1])
+    #print(data)
+    for i in range(len(data)):
+        output.append(data[i][1])
 
     return output
 #Get mean array
 def get_mean_list():
+    set_mean()
     return mean_vals
 
 def get_mean_data():
@@ -69,3 +71,7 @@ def get_mean_data():
 
 #print(mean_vals)
 #print(data_mean_input)
+#print(get_mean_data())
+#print(get_mean_list())
+#print(mean_vals)
+#print(get_output_list())
