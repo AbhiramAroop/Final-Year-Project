@@ -189,6 +189,7 @@ for item in x:
     #combined, X and y make up the training data
     #NEEDS TO BE A NUMPY ARRAY TO WORK WITH TENSORFLOW
 
+print(x,y)
 z = np.random.rand(10,10)
     #sample test dataset
 

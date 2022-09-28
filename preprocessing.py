@@ -32,8 +32,9 @@ def init_mean(data):
 
 #Computes the mean for all parametes
 def set_mean():
-    data = input_output_data.input_files_to_input_matrix(2)[1]
+    recordIds, data = input_output_data.input_files_to_input_matrix(2)
     means = init_mean(data)
+
     for i in means:
         mean_vals.append(compute_mean(i))
 
@@ -51,8 +52,10 @@ def set_mean():
             else:
                 data_mean_input[i].append(mean_vals[j])
 
-def get_output_list():
-    data = input_output_data.read_output_file()
+    return recordIds
+
+def get_output_list(recordIds):
+    data = input_output_data.read_output_file(recordIds)
     output = []
     #print(data)
     for i in range(len(data)):
@@ -61,12 +64,12 @@ def get_output_list():
     return output
 #Get mean array
 def get_mean_list():
-    set_mean()
-    return mean_vals
+    recordIds = set_mean()
+    return mean_vals,recordIds
 
 def get_mean_data():
-    set_mean()
-    return data_mean_input
+    recordIds = set_mean()
+    return data_mean_input,recordIds
 
 
 #print(mean_vals)

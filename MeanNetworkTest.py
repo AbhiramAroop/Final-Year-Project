@@ -3,23 +3,18 @@
 #   -> tensorflow
 #   -> shap
 #   -> pyplot
-import preprocessing
+
 import tensorflow as tf
 tf.compat.v1.disable_v2_behavior()
     #shap does not want to work cleanly with recent tensorflow versions. Use above if tf version 2.4+
     # https://stackoverflow.com/questions/66814523/shap-deepexplainer-with-tensorflow-2-4-error
 
-#from tensorflow import keras
+from tensorflow import keras
 from tensorflow.keras import models, layers, utils
 import os
 import matplotlib.pyplot as plt
 import numpy as np
 import shap
-
-#TEST WITH ONLY DEATH OUTPUT
-input_data_sets, recordIds = preprocessing.get_mean_data()
-output_data_sets = preprocessing.get_output_list(recordIds)
-
 
 #GRAPH VISUALISATION, NOT ORIGINAL --> DELETE OR CREDIT WHEN USING:
     # https://towardsdatascience.com/deep-learning-with-python-neural-networks-complete-tutorial-6b53c0b06af0
@@ -151,7 +146,7 @@ def binaryStepActivtion(x):
 model = models.Sequential(name="Test_Model", layers=[
     layers.Dense(              #a fully connected layer
           name="test_1",
-          input_dim=len(input_data_sets[0]),        #num of inputs as singular layer model
+          input_dim=11,        #num of inputs as singular layer model
           units=1,             #num of outputs as singular layer model
           activation= 'sigmoid' #f(x)=x
           #https://www.tensorflow.org/api_docs/python/tf/keras/activations/sigmoid
@@ -159,18 +154,17 @@ model = models.Sequential(name="Test_Model", layers=[
 ])
 
 
-n_features = len(input_data_sets[0]) #no. variables
-print(n_features)
+n_features = 11
 model2 = models.Sequential(name="DeepNN", layers=[
     ### hidden layer 1
     layers.Dense(name="h1", input_dim=n_features,
                  units=int(round((n_features + 1) / 2)),
-                 activation='sigmoid'),
+                 activation='relu'),
     layers.Dropout(name="drop1", rate=0.2),
 
     ### hidden layer 2
     layers.Dense(name="h2", units=int(round((n_features + 1) / 4)),
-                 activation='sigmoid'),
+                 activation='relu'),
     layers.Dropout(name="drop2", rate=0.2),
 
     ### layer output
@@ -178,37 +172,27 @@ model2 = models.Sequential(name="DeepNN", layers=[
 ])
 
 #uncomment to see a visual representation of the above models
-visualize_nn(model, description=True, figsize=(10,8))
-visualize_nn(model2, description=True, figsize=(10,8))
+#visualize_nn(model, description=True, figsize=(10,8))
+#visualize_nn(model2, description=True, figsize=(10,8))
 
 print("Training sets: ")
 
 #change the 10000 value to increase/decrease the amount of training data (and also train time)
-TRAIN_DATA = len(input_data_sets)
+TRAIN_DATA = 10000
 
-x = np.array(input_data_sets[0:7800]).reshape(7800,41)
-print(len(x))
-#for i in input_data_sets:
-#    np.append(x,np.array(i))
-#print(len(x),len(x[2]))
+x = np.random.rand(TRAIN_DATA,11)
+    #generates an array of size TRAIN_DATA, with each element an array of size 10 contiang values from 1 --> 0
+y = []
+for item in x:
+    y = np.append(y, round(sum(item)/len(item)))
+    #generates an array of size x with each element either a 1 or 0
+    #combined, X and y make up the training data
+    #NEEDS TO BE A NUMPY ARRAY TO WORK WITH TENSORFLOW
 
-
-#x = np.random.rand(TRAIN_DATA,41)
-y = np.array(output_data_sets[0:7800])
-print('LEN y',len(y))
-
-#print("x",x)
-#print(y)
-#z = np.array(x[0])
-z = np.array(input_data_sets[7800:7955]).reshape(155,41)
-z_output = []
-for i in range(len(z)):
-    z_output.append(output_data_sets[i+7800])
+print("x",x)
+z = np.random.rand(10,11)
     #sample test dataset
-print("THIS IS Z VALUE",z)
-#print(len(z),len(z[0]))
-print("AMOUNT OF INPUTS:",len(input_data_sets))
-print("AMOUNT OF OUTPUTS:",len(output_data_sets))
+#print(z)
 #CAN CHANGE EVERY INSTANCE OF 'MODEL2' TO 'MODEL' BELOW TO SEE DIFFERENCE BETWEEN BOTH MODELS
 
 #Optimizer --> responsible for changing the weights mid-training, the 'adam' algorithm is considered efficient and generally effective
@@ -219,7 +203,7 @@ print("AMOUNT OF OUTPUTS:",len(output_data_sets))
 model2.compile(optimizer="adam", loss='binary_crossentropy', metrics=['accuracy'])
 
 #uncomment/recomment to untrain/retrain the model
-training = model2.fit(x=x, y=y, batch_size=64, epochs=10, shuffle=True, verbose=1, validation_split=0.1)
+training = model2.fit(x=x, y=y, batch_size=32, epochs=10, shuffle=True, verbose=1, validation_split=0.1)
     #batches --> size that the training set should be split into to avoid processing it all at once (should be a power of 2 ideally)
     #epochs --> number of iterations over the ENTIRE training set (higher --> better trained --> more time --> increased risk of over-fitting)
     #shuffle --> shuffle the training set or not before training
@@ -232,54 +216,21 @@ training = model2.fit(x=x, y=y, batch_size=64, epochs=10, shuffle=True, verbose=
 #Runs the model against a random selection of (potentially) untrained inputs
 predictions = model2.predict(z)
 for i in range(len(z)):
-    print("Given: " + str(z[i]) + " Prediction: " + str(predictions[i]) + " Expected: " + str(z_output[i]))
+    print("Given: " + str(z[i]) + " Prediction: " + str(predictions[i]) + " Expected: " + str(round(sum(z[i])/len(z[i]))))
 
 i = 1
 explainer_shap(model2,
-               X_names=["1st: " + str(round(x[i][0],5)),
-                        "2nd: " + str(round(x[i][1],5)),
-                        "3rd: " + str(round(x[i][2],5)),
-                        "4th: " + str(round(x[i][3],5)),
-                        "5th: " + str(round(x[i][4],5)),
-                        "6th: " + str(round(x[i][5],5)),
-                        "7th: " + str(round(x[i][6],5)),
-                        "8th: " + str(round(x[i][7],5)),
-                        "9th: " + str(round(x[i][8],5)),
-                        "10th: " + str(round(x[i][9],5)),
-                        "11st: " + str(round(x[i][10],5)),
-                        "12nd: " + str(round(x[i][11],5)),
-                        "13rd: " + str(round(x[i][12],5)),
-                        "14th: " + str(round(x[i][13],5)),
-                        "15th: " + str(round(x[i][14],5)),
-                        "16th: " + str(round(x[i][15],5)),
-                        "17th: " + str(round(x[i][16],5)),
-                        "18th: " + str(round(x[i][17],5)),
-                        "19th: " + str(round(x[i][18],5)),
-                        "20th: " + str(round(x[i][19],5)),
-                        "21st: " + str(round(x[i][20],5)),
-                        "22nd: " + str(round(x[i][21],5)),
-                        "23rd: " + str(round(x[i][22],5)),
-                        "24th: " + str(round(x[i][23],5)),
-                        "25th: " + str(round(x[i][24],5)),
-                        "26th: " + str(round(x[i][25],5)),
-                        "27th: " + str(round(x[i][26],5)),
-                        "28th: " + str(round(x[i][27],5)),
-                        "29th: " + str(round(x[i][28],5)),
-                        "30th: " + str(round(x[i][29],5)),
-                        "31st: " + str(round(x[i][30],5)),
-                        "32nd: " + str(round(x[i][31],5)),
-                        "33rd: " + str(round(x[i][32],5)),
-                        "34th: " + str(round(x[i][33],5)),
-                        "35th: " + str(round(x[i][34],5)),
-                        "36th: " + str(round(x[i][35],5)),
-                        "37th: " + str(round(x[i][36],5)),
-                        "38th: " + str(round(x[i][37],5)),
-                        "39th: " + str(round(x[i][38],5)),
-                        "40th: " + str(round(x[i][39],5)),
-                        "41th: " + str(round(x[i][40],5))],
-
-
-
+               X_names=["1st: " + str(round(x[i][0],2)),
+                        "2nd: " + str(round(x[i][1],2)),
+                        "3rd: " + str(round(x[i][2],2)),
+                        "4th: " + str(round(x[i][3],2)),
+                        "5th: " + str(round(x[i][4],2)),
+                        "6th: " + str(round(x[i][5],2)),
+                        "7th: " + str(round(x[i][6],2)),
+                        "8th: " + str(round(x[i][7],2)),
+                        "9th: " + str(round(x[i][8],2)),
+                        "10th: " + str(round(x[i][9],2)),
+                        "11th: " + str(round(x[i][10],2))],
                X_instance=x[i],
                X_train=x,
 
@@ -290,7 +241,8 @@ explainer_shap(model2,
                #task="classification",
                task="regression",
 
-               top=41)
+
+               top=10)
 
 #ORIGINAL CODE:
 

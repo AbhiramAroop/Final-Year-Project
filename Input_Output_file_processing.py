@@ -17,10 +17,11 @@ def read_input_file(input_file):
         input_data.append([time_int, my_data[i][1], my_data[i][2]])
 
     input_data = np.array(input_data)
+
     return input_data
 
 #Read data from an output file
-def read_output_file():
+def read_output_file(recordIDs):
     my_data = np.genfromtxt("physionet.org/files/challenge-2012/1.0.0/Outcomes-a.txt", delimiter=',',
                             dtype='U64')
     # print(my_data)
@@ -28,8 +29,22 @@ def read_output_file():
     output_data = []
     for i in my_data:
         output_data.append([int(i[0]), int(i[5])])
-    output_data = np.array(output_data)
-    return output_data
+
+    my_data = np.genfromtxt("physionet.org/files/challenge-2012/1.0.0/Outcomes-b.txt", delimiter=',',
+                            dtype='U64')
+    my_data = my_data[1:]
+    for i in my_data:
+        output_data.append([int(i[0]), int(i[5])])
+
+    sorted_output_data = []
+    for i in output_data:
+        if (str(i[0])+'.0') in recordIDs:
+            sorted_output_data.append(i)
+
+    print(len(sorted_output_data))
+
+
+    return sorted_output_data
 
 #convert data into two numpy arrays
 #first with parameters second with values
@@ -102,9 +117,15 @@ def input_format_3(values):
 #Puts all input filenames into a list
 def input_files_to_list():
     input_file_loc = os.listdir("physionet.org/files/challenge-2012/1.0.0/set-a")
+    input_file_loc2 = os.listdir("physionet.org/files/challenge-2012/1.0.0/set-b")
     input_files = []
     for i in input_file_loc:
-        input_files.append("physionet.org/files/challenge-2012/1.0.0/set-a/" + i)
+        if "index" not in i:
+            input_files.append("physionet.org/files/challenge-2012/1.0.0/set-a/" + i)
+
+    for i in input_file_loc2:
+        if "index" not in i:
+            input_files.append("physionet.org/files/challenge-2012/1.0.0/set-b/" + i)
 
     return input_files
 
@@ -112,7 +133,7 @@ def input_files_to_list():
 #converts all of the inputs into a matrix format (format 3)
 #only SET A for now
 def input_files_to_input_matrix(format):
-    input_files = input_files_to_list()[:-1]
+    input_files = input_files_to_list()
     input_values_matrix = []
     record_ids = []
 
@@ -133,4 +154,7 @@ def input_files_to_input_matrix(format):
 
 
 #data = input_files_to_input_matrix(3)
-#print(data)
+#read_input_file("physionet.org/files/challenge-2012/1.0.0/Outcomes-a.txt")
+#read_output_file()
+#record_ids,input_values_matrix = input_files_to_input_matrix(2)
+#read_output_file(record_ids)
