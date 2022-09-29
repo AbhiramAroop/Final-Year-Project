@@ -178,13 +178,16 @@ model2 = models.Sequential(name="DeepNN", layers=[
 ])
 
 #uncomment to see a visual representation of the above models
-visualize_nn(model, description=True, figsize=(10,8))
-visualize_nn(model2, description=True, figsize=(10,8))
+#visualize_nn(model, description=True, figsize=(10,8))
+#visualize_nn(model2, description=True, figsize=(10,8))
 
 print("Training sets: ")
 
 #change the 10000 value to increase/decrease the amount of training data (and also train time)
 TRAIN_DATA = len(input_data_sets)
+
+
+
 
 x = np.array(input_data_sets[0:7800]).reshape(7800,41)
 print(len(x))
@@ -196,6 +199,7 @@ print(len(x))
 #x = np.random.rand(TRAIN_DATA,41)
 y = np.array(output_data_sets[0:7800])
 print('LEN y',len(y))
+
 
 #print("x",x)
 #print(y)
@@ -209,6 +213,37 @@ print("THIS IS Z VALUE",z)
 #print(len(z),len(z[0]))
 print("AMOUNT OF INPUTS:",len(input_data_sets))
 print("AMOUNT OF OUTPUTS:",len(output_data_sets))
+
+"""
+#TESTING WHETHER DATA IS BIAS to output 0. UNCOMMENT TO TEST
+zero_inputs = []
+one_inputs = []
+zero_outputs = []
+one_outputs = []
+
+for i in range(len(y)):
+    if y[i] == 1:
+        one_outputs.append(y[i])
+        one_inputs.append(x[i])
+    else:
+        zero_outputs.append(y[i])
+        zero_inputs.append(x[i])
+
+zero_inputs = zero_inputs[0:len(one_inputs)]
+zero_outputs = zero_outputs[0:len(one_outputs)]
+
+for i in range(len(zero_outputs)):
+    zero_inputs.append(one_inputs[i])
+    zero_outputs.append(one_outputs[i])
+
+print("ZERO ONE RATIO: ",len(one_outputs))
+print("ONEE",zero_inputs)
+x = np.array(one_inputs).reshape(1096,41)
+y = np.array(one_outputs)
+"""
+
+
+
 #CAN CHANGE EVERY INSTANCE OF 'MODEL2' TO 'MODEL' BELOW TO SEE DIFFERENCE BETWEEN BOTH MODELS
 
 #Optimizer --> responsible for changing the weights mid-training, the 'adam' algorithm is considered efficient and generally effective
