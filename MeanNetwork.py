@@ -177,6 +177,7 @@ model2 = models.Sequential(name="DeepNN", layers=[
     layers.Dense(name="output", units=1, activation='sigmoid')
 ])
 
+
 #uncomment to see a visual representation of the above models
 #visualize_nn(model, description=True, figsize=(10,8))
 #visualize_nn(model2, description=True, figsize=(10,8))
@@ -328,5 +329,5 @@ explainer_shap(model2,
                top=41)
 
 #ORIGINAL CODE:
-
+#tf.saved_model.save(model2, "")
 #none right now, :(
