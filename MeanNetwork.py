@@ -190,7 +190,7 @@ TRAIN_DATA = len(input_data_sets)
 
 
 
-x = np.array(input_data_sets[0:7800]).reshape(7800,41)
+x = np.array(input_data_sets[0:7955]).reshape(7955,41)
 print(len(x))
 #for i in input_data_sets:
 #    np.append(x,np.array(i))
@@ -198,17 +198,17 @@ print(len(x))
 
 
 #x = np.random.rand(TRAIN_DATA,41)
-y = np.array(output_data_sets[0:7800])
+y = np.array(output_data_sets[0:7955])
 print('LEN y',len(y))
 
 
 #print("x",x)
 #print(y)
 #z = np.array(x[0])
-z = np.array(input_data_sets[7800:7955]).reshape(155,41)
+z = np.array(input_data_sets[7955:len(input_data_sets)]).reshape(len(input_data_sets)-7955,41)
 z_output = []
 for i in range(len(z)):
-    z_output.append(output_data_sets[i+7800])
+    z_output.append(output_data_sets[i+7955])
     #sample test dataset
 print("THIS IS Z VALUE",z)
 #print(len(z),len(z[0]))
@@ -269,6 +269,9 @@ training = model2.fit(x=x, y=y, batch_size=64, epochs=10, shuffle=True, verbose=
 predictions = model2.predict(z)
 for i in range(len(z)):
     print("Given: " + str(z[i]) + " Prediction: " + str(predictions[i]) + " Expected: " + str(z_output[i]))
+
+model2.save_weights("./TestNetwork/Weights/")
+model2.save("./TestNetwork/Model/model2.h5")
 
 i = 1
 explainer_shap(model2,

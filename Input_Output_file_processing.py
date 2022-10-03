@@ -36,6 +36,12 @@ def read_output_file(recordIDs):
     for i in my_data:
         output_data.append([int(i[0]), int(i[5])])
 
+    my_data = np.genfromtxt("physionet.org/files/challenge-2012/1.0.0/Outcomes-c.txt", delimiter=',',
+                            dtype='U64')
+    my_data = my_data[1:]
+    for i in my_data:
+        output_data.append([int(i[0]), int(i[5])])
+
     sorted_output_data = []
     for i in output_data:
         if (str(i[0])+'.0') in recordIDs:
@@ -87,11 +93,13 @@ def input_format_2(input_parameter,input_value):
         values.append([])
 
     record_id = input_matrix[1][1][0]
-
+    #print(input_matrix)
     for i in input_matrix[2:]:
-        # print(i[0])
-        index = parameters.index(i[0])
-        values[index] = i[1]
+        #print("pvp",i)
+        if i[0] != '':
+            index = parameters.index(i[0])
+            #print("index",index)
+            values[index] = i[1]
 
     # change values to float
     for i in range(len(values)):
@@ -118,6 +126,7 @@ def input_format_3(values):
 def input_files_to_list():
     input_file_loc = os.listdir("physionet.org/files/challenge-2012/1.0.0/set-a")
     input_file_loc2 = os.listdir("physionet.org/files/challenge-2012/1.0.0/set-b")
+    input_file_loc3 = os.listdir("physionet.org/files/challenge-2012/1.0.0/set-c")
     input_files = []
     for i in input_file_loc:
         if "index" not in i:
@@ -126,6 +135,11 @@ def input_files_to_list():
     for i in input_file_loc2:
         if "index" not in i:
             input_files.append("physionet.org/files/challenge-2012/1.0.0/set-b/" + i)
+
+    for i in input_file_loc3:
+        if "index" not in i:
+            #print("i",i)
+            input_files.append("physionet.org/files/challenge-2012/1.0.0/set-c/" + i)
 
     return input_files
 
@@ -153,7 +167,7 @@ def input_files_to_input_matrix(format):
     return record_ids,input_values_matrix
 
 
-#data = input_files_to_input_matrix(3)
+data = input_files_to_input_matrix(3)
 #read_input_file("physionet.org/files/challenge-2012/1.0.0/Outcomes-a.txt")
 #read_output_file()
 #record_ids,input_values_matrix = input_files_to_input_matrix(2)
