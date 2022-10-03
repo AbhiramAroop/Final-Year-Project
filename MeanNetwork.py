@@ -210,7 +210,7 @@ z_output = []
 for i in range(len(z)):
     z_output.append(output_data_sets[i+7955])
     #sample test dataset
-print("THIS IS Z VALUE",z)
+print("THIS IS Z VALUE",z[0],z_output[1])
 #print(len(z),len(z[0]))
 print("AMOUNT OF INPUTS:",len(input_data_sets))
 print("AMOUNT OF OUTPUTS:",len(output_data_sets))
@@ -255,7 +255,7 @@ y = np.array(one_outputs)
 model2.compile(optimizer="adam", loss='binary_crossentropy', metrics=['accuracy'])
 
 #uncomment/recomment to untrain/retrain the model
-training = model2.fit(x=x, y=y, batch_size=64, epochs=10, shuffle=True, verbose=1, validation_split=0.1)
+training = model2.fit(x=x, y=y, batch_size=64, epochs=25, shuffle=True, verbose=1, validation_split=0.1)
     #batches --> size that the training set should be split into to avoid processing it all at once (should be a power of 2 ideally)
     #epochs --> number of iterations over the ENTIRE training set (higher --> better trained --> more time --> increased risk of over-fitting)
     #shuffle --> shuffle the training set or not before training
