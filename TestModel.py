@@ -23,7 +23,7 @@ def utils_nn_config(model):
     return lst_layers
 
 #used to visually see the models. NOTE: only 1 window will be open at a time, need to close previous models before a new one will appear
-def visualize_nn(model, description=False, figsize=(10, 8)):
+def visualize_nn(model, description=False, figsize=(20, 16)):
     ## get layers info
     lst_layers = utils_nn_config(model)
     layer_sizes = [layer["out"] for layer in lst_layers]
@@ -120,7 +120,7 @@ def explainer_shap(model, X_names, X_instance, X_train=None, task="classificatio
         #shap.waterfall_plot(shap_values) #features=X_instance
         #shap.waterfall_plot(shap_values, )
         #shap.plots._waterfall.waterfall_legacy(explainer.expected_value[0], shap_values, features=X_instance,feature_names=X_names, max_display=20)
-        shap.bar_plot(shap_values,features=X_instance,feature_names=X_names, max_display=20)
+        shap.bar_plot(shap_values,features=X_names, max_display=20, plot_size=[16,12])
 
 
 my_model = tf.keras.models.load_model("./TestNetwork/Model/model2.h5")
