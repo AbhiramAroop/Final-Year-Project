@@ -47,7 +47,6 @@ def read_output_file(recordIDs):
         if (str(i[0])+'.0') in recordIDs:
             sorted_output_data.append(i)
 
-    print(len(sorted_output_data))
 
 
     return sorted_output_data
@@ -167,7 +166,7 @@ def input_files_to_input_matrix(format):
     return record_ids,input_values_matrix
 
 
-data = input_files_to_input_matrix(3)
+#data = input_files_to_input_matrix(3)
 #read_input_file("physionet.org/files/challenge-2012/1.0.0/Outcomes-a.txt")
 #read_output_file()
 #record_ids,input_values_matrix = input_files_to_input_matrix(2)

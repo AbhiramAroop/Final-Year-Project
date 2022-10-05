@@ -161,6 +161,7 @@ model = models.Sequential(name="Test_Model", layers=[
 
 n_features = len(input_data_sets[0]) #no. variables
 print(n_features)
+#sigmoid(x) = 1 / (1 + exp(-x))
 model2 = models.Sequential(name="DeepNN", layers=[
     ### hidden layer 1
     layers.Dense(name="h1", input_dim=n_features,
@@ -331,6 +332,3 @@ explainer_shap(model2,
 
                top=41)
 
-#ORIGINAL CODE:
-#tf.saved_model.save(model2, "")
-#none right now, :(

@@ -138,6 +138,7 @@ x = inputs
 
 parameters = "Age Gender Height ICUType Weight Albumin ALP ALT AST Bilirubin BUN Cholesterol Creatinine DiasABP FiO2 GCS Glucose HCO3 HCT HR K Lactate Mg MAP MechVent Na NIDiasABP NIMAP NISysABP PaCO2 PaO2 pH Platelets RespRate SaO2 SysABP Temp TroponinI TroponinT Urine WBC"
 parameters = parameters.split(" ")
+#print(parameters)
 
 i = 1
 explainer_shap(my_model,

@@ -74,8 +74,8 @@ def get_mean_data():
 
 #print(mean_vals)
 #print(data_mean_input)
-data,recordIds = get_mean_data()
-print(data[0:10])
+#data,recordIds = get_mean_data()
+#print(data[0:10])
 #print(get_mean_list())
 #print(mean_vals)
-print(get_output_list(recordIds)[0:10])
+#print(get_output_list(recordIds)[0:10])
