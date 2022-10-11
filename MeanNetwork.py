@@ -268,55 +268,34 @@ training = model2.fit(x=x, y=y, batch_size=64, epochs=25, shuffle=True, verbose=
 
 #Runs the model against a random selection of (potentially) untrained inputs
 predictions = model2.predict(z)
+tn = 0
+tp = 0
+fn = 0
+fp = 0
+predictions = np.round(predictions)
 for i in range(len(z)):
-    print("Given: " + str(z[i]) + " Prediction: " + str(predictions[i]) + " Expected: " + str(z_output[i]))
-
+    #print("Given: " + str(z[i]) + " Prediction: " + str(predictions[i]) + " Expected: " + str(z_output[i]))
+    if(z_output[i] == 1):
+        if(predictions[i] == 1):
+            tp += 1
+        else:
+            fn += 1
+    else:
+        if(predictions[i] == 1):
+            fp += 1
+        else:
+            tn += 1
+print("Tn: " + str(tn) + " tp: " + str(tp) + " fn: " + str(fn) + " fp: " + str(fp))
+first = tp/(tp+fn)
+second = tp/(tp+fp)
+print(str(first), str(second))
 model2.save_weights("./TestNetwork/Weights/")
 model2.save("./TestNetwork/Model/model2.h5")
-
+parameters = "Age Gender Height ICUType Weight Albumin ALP ALT AST Bilirubin BUN Cholesterol Creatinine DiasABP FiO2 GCS Glucose HCO3 HCT HR K Lactate Mg MAP MechVent Na NIDiasABP NIMAP NISysABP PaCO2 PaO2 pH Platelets RespRate SaO2 SysABP Temp TroponinI TroponinT Urine WBC"
+parameters = parameters.split(" ")
 i = 1
 explainer_shap(model2,
-               X_names=["1st: " + str(round(x[i][0],5)),
-                        "2nd: " + str(round(x[i][1],5)),
-                        "3rd: " + str(round(x[i][2],5)),
-                        "4th: " + str(round(x[i][3],5)),
-                        "5th: " + str(round(x[i][4],5)),
-                        "6th: " + str(round(x[i][5],5)),
-                        "7th: " + str(round(x[i][6],5)),
-                        "8th: " + str(round(x[i][7],5)),
-                        "9th: " + str(round(x[i][8],5)),
-                        "10th: " + str(round(x[i][9],5)),
-                        "11st: " + str(round(x[i][10],5)),
-                        "12nd: " + str(round(x[i][11],5)),
-                        "13rd: " + str(round(x[i][12],5)),
-                        "14th: " + str(round(x[i][13],5)),
-                        "15th: " + str(round(x[i][14],5)),
-                        "16th: " + str(round(x[i][15],5)),
-                        "17th: " + str(round(x[i][16],5)),
-                        "18th: " + str(round(x[i][17],5)),
-                        "19th: " + str(round(x[i][18],5)),
-                        "20th: " + str(round(x[i][19],5)),
-                        "21st: " + str(round(x[i][20],5)),
-                        "22nd: " + str(round(x[i][21],5)),
-                        "23rd: " + str(round(x[i][22],5)),
-                        "24th: " + str(round(x[i][23],5)),
-                        "25th: " + str(round(x[i][24],5)),
-                        "26th: " + str(round(x[i][25],5)),
-                        "27th: " + str(round(x[i][26],5)),
-                        "28th: " + str(round(x[i][27],5)),
-                        "29th: " + str(round(x[i][28],5)),
-                        "30th: " + str(round(x[i][29],5)),
-                        "31st: " + str(round(x[i][30],5)),
-                        "32nd: " + str(round(x[i][31],5)),
-                        "33rd: " + str(round(x[i][32],5)),
-                        "34th: " + str(round(x[i][33],5)),
-                        "35th: " + str(round(x[i][34],5)),
-                        "36th: " + str(round(x[i][35],5)),
-                        "37th: " + str(round(x[i][36],5)),
-                        "38th: " + str(round(x[i][37],5)),
-                        "39th: " + str(round(x[i][38],5)),
-                        "40th: " + str(round(x[i][39],5)),
-                        "41th: " + str(round(x[i][40],5))],
+               X_names= parameters,
 
 
 
@@ -327,8 +306,8 @@ explainer_shap(model2,
                #    --> classification: works as expected
                #    --> regression: slight grey text formatting issues still but would look better once working
 
-               #task="classification",
-               task="regression",
+               task="classification",
+               #task="regression",
 
-               top=41)
+               top=10)
 
