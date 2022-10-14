@@ -1,0 +1,48 @@
+
+Testing For Basic Model Learning against Simple Inputs
+NeuralNetwork accuracy = 80.0
+TN: 1 FP: 1 FN: 0 TP: 3
+RandomForest accuracy = 80.0
+TN: 1 FP: 1 FN: 0 TP: 3
+ExtraForest accuracy = 80.0
+TN: 1 FP: 1 FN: 0 TP: 3
+AdaBoost accuracy = 100.0
+TN: 2 FP: 0 FN: 0 TP: 3
+VotingClassifier accuracy = 80.0
+TN: 1 FP: 1 FN: 0 TP: 3
+
+Testing For Model Learning against inputs which heavily favour a specific classification 
+NeuralNetwork accuracy = 60.0
+TN: 2 FP: 0 FN: 2 TP: 1
+RandomForest accuracy = 60.0
+TN: 2 FP: 0 FN: 2 TP: 1
+ExtraForest accuracy = 60.0
+TN: 2 FP: 0 FN: 2 TP: 1
+AdaBoost accuracy = 60.0
+TN: 2 FP: 0 FN: 2 TP: 1
+VotingClassifier accuracy = 60.0
+TN: 2 FP: 0 FN: 2 TP: 1
+
+Testing For Basic Model Learning against a low number of Inputs
+NeuralNetwork accuracy = 40.0
+TN: 1 FP: 1 FN: 2 TP: 1
+RandomForest accuracy = 60.0
+TN: 1 FP: 1 FN: 1 TP: 2
+ExtraForest accuracy = 60.0
+TN: 1 FP: 1 FN: 1 TP: 2
+AdaBoost accuracy = 60.0
+TN: 1 FP: 1 FN: 1 TP: 2
+VotingClassifier accuracy = 60.0
+TN: 1 FP: 1 FN: 1 TP: 2
+
+Testing For Basic Model Learning against Inputs which may not cover all relationships between variables and output
+NeuralNetwork accuracy = 0.0
+TN: 0 FP: 2 FN: 3 TP: 0
+RandomForest accuracy = 0.0
+TN: 0 FP: 2 FN: 3 TP: 0
+ExtraForest accuracy = 0.0
+TN: 0 FP: 2 FN: 3 TP: 0
+AdaBoost accuracy = 0.0
+TN: 0 FP: 2 FN: 3 TP: 0
+VotingClassifier accuracy = 0.0
+TN: 0 FP: 2 FN: 3 TP: 0

@@ -263,7 +263,7 @@ shap.plots.beeswarm(shap_values2,max_display=20)
 
 
 shap.summary_plot(shap_values, inTrain, feature_names=parameters, class_names=["Survived", "Died"])
-
+shap.waterfall_plot(shap_values)
 
 
 #summary plots as a bar graph, somewhat confusing
