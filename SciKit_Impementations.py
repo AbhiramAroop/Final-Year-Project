@@ -57,25 +57,25 @@ outTest = output_data_sets[7955:11950]
 #NEURAL NETWORK IMPLEMENTATION:
 from sklearn.neural_network import MLPClassifier
 
-print("fitting to classifier...")
-#Assumes default values --> https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html#sklearn.neural_network.MLPClassifier
+#Assumes default Neural Network values
+# --> https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html#sklearn.neural_network.MLPClassifier
 clfNN = MLPClassifier().fit(inTrain, outTrain)
 
-print("predicting on test data...")
+#Creates the output list of predictions based on the given Test dataset
 predictions = clfNN.predict(inTest)
 
-
-
+#Caluclates both the model's accuracy and confusion matrix from the newly generated list of predictions
 accuracy = accuracy_score(outTest,predictions)*100
 confusion_mat = confusion_matrix(outTest,predictions)
 
-#True/False Positives/Negatives for binary cases
-tn, fp, fn, tp = confusion_matrix(outTest, predictions).ravel()
+#True/False Positive/Negative value are generated from the produced confusion matrix
+tn, fp, fn, tp = confusion_mat.ravel()
 
+#Provides the calculated values to the user in a simple, yet readable format at runtime
 print("Accuracy for Neural Network is:",accuracy)
 print("Confusion Matrix")
 print(confusion_mat)
-print(tn, fp, fn, tp)
+print("True Negatives:" + str(tn), " False Positives: " + str(fp), " False Negatives: " + str(fn), " True Positives: " + str(tp))
 
 scoreFile.write("Neural Network: \n")
 first = tp/(tp+fn)
@@ -225,7 +225,7 @@ shap_values = explainer.shap_values(np.asarray(inTrain[:100]))
 
 #https://shap-lrjball.readthedocs.io/en/latest/generated/shap.summary_plot.html
 
-
+#Sample predictions:
 prediction = clfRF.predict_proba([inTrain[34]])
 print(prediction,34)
 
@@ -245,11 +245,9 @@ prediction = clfRF.predict_proba([inTrain[39]])
 print(prediction,39)
 
 
-testValues = explainer(np.asarray(inTrain[:100]))
 
-#shap.summary_plot(shap_values[0],inTrain, feature_names=parameters)
-#shap.summary_plot(shap_values[1],inTrain, feature_names=parameters)
-#not tested:
+#Output of interpretable models via SHAP
+testValues = explainer(np.asarray(inTrain[:100]))
 
 
 shap_values2 = copy.deepcopy(testValues)
@@ -263,12 +261,4 @@ shap.plots.beeswarm(shap_values2,max_display=20)
 
 
 shap.summary_plot(shap_values, inTrain, feature_names=parameters, class_names=["Survived", "Died"])
-shap.waterfall_plot(shap_values)
 
-
-#summary plots as a bar graph, somewhat confusing
-#shap.summary_plot(shap_values,np.asarray(inTrain[8]), feature_names=parameters)
-#plot_type = "bar"
-#,feature_names=parameters
-
-#https://github.com/slundberg/shap/issues/764
